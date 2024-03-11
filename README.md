@@ -614,7 +614,7 @@ Update the endpoint `GET /files/:id/data` to accept a query parameter `size`:
 * If the local file doesn’t exist, return an error `Not found` with a status code 404
 
 **Terminal 3:** (start the worker)
-```
+```groovy
 bob@dylan:~$ npm run start-worker
 ...
 ```
