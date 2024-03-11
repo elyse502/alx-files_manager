@@ -514,8 +514,45 @@ bob@dylan:~$ curl -XGET 0.0.0.0:5000/files/5f1e8896c7ba06511e683b25 -H "X-Token:
 bob@dylan:~$
 ```
 
+## 7. File publish/unpublish: [utils/](utils/), [routes/index.js](routes/index.js), [controllers/FilesController.js](controllers/FilesController.js)
+In the file `routes/index.js`, add 2 new endpoints:
 
+* `PUT /files/:id/publish` => `FilesController.putPublish`
+* `PUT /files/:id/publish` => `FilesController.putUnpublish`
 
+In the file `controllers/FilesController.js`, add the 2 new endpoints:
+
+`PUT /files/:id/publish` should set `isPublic` to `true` on the file document based on the ID:
+
+* Retrieve the user based on the token:
+  * If not found, return an error `Unauthorized` with a status code 401
+* If no file document is linked to the user and the ID passed as parameter, return an error `Not found` with a status code 404
+* Otherwise:
+  * Update the value of `isPublic` to `true`
+  * And return the file document with a status code 200
+
+`PUT /files/:id/unpublish` should set `isPublic` to `false` on the file document based on the ID:
+
+* Retrieve the user based on the token:
+  * If not found, return an error `Unauthorized` with a status code 401
+* If no file document is linked to the user and the ID passed as parameter, return an error `Not found` with a status code 404
+* Otherwise:
+  * Update the value of `isPublic` to `false`
+  * And return the file document with a status code 200
+```groovy
+bob@dylan:~$ curl 0.0.0.0:5000/connect -H "Authorization: Basic Ym9iQGR5bGFuLmNvbTp0b3RvMTIzNCE=" ; echo ""
+{"token":"f21fb953-16f9-46ed-8d9c-84c6450ec80f"}
+bob@dylan:~$ 
+bob@dylan:~$ curl -XGET 0.0.0.0:5000/files/5f1e8896c7ba06511e683b25 -H "X-Token: f21fb953-16f9-46ed-8d9c-84c6450ec80f" ; echo ""
+{"id":"5f1e8896c7ba06511e683b25","userId":"5f1e7cda04a394508232559d","name":"image.png","type":"image","isPublic":false,"parentId":"5f1e881cc7ba06511e683b23"}
+bob@dylan:~$
+bob@dylan:~$ curl -XPUT 0.0.0.0:5000/files/5f1e8896c7ba06511e683b25/publish -H "X-Token: f21fb953-16f9-46ed-8d9c-84c6450ec80f" ; echo ""
+{"id":"5f1e8896c7ba06511e683b25","userId":"5f1e7cda04a394508232559d","name":"image.png","type":"image","isPublic":true,"parentId":"5f1e881cc7ba06511e683b23"}
+bob@dylan:~$ 
+bob@dylan:~$ curl -XPUT 0.0.0.0:5000/files/5f1e8896c7ba06511e683b25/unpublish -H "X-Token: f21fb953-16f9-46ed-8d9c-84c6450ec80f" ; echo ""
+{"id":"5f1e8896c7ba06511e683b25","userId":"5f1e7cda04a394508232559d","name":"image.png","type":"image","isPublic":false,"parentId":"5f1e881cc7ba06511e683b23"}
+bob@dylan:~$
+```
 
 
 
