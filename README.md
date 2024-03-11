@@ -639,11 +639,41 @@ new_image.png: PNG image data, 250 x 272, 8-bit/color RGBA, non-interlaced
 bob@dylan:~$
 ```
 
+## 10. Tests!: [tests/](tests/)
+Of course, a strong and stable project can not be good without tests.
 
+Create tests for `redisClient` and `dbClient`.
 
+Create tests for each endpoints:
 
+* `GET /status`
+* `GET /stats`
+* `POST /users`
+* `GET /connect`
+* `GET /disconnect`
+* `GET /users/me`
+* `POST /files`
+* `GET /files/:id`
+* `GET /files` (don’t forget the pagination)
+* `PUT /files/:id/publish`
+* `PUT /files/:id/unpublish`
+* `GET /files/:id/data`
 
+## 11. New user - welcome email: [utils/](utils/), [worker.js](worker.js), [controllers/UsersController.js](controllers/UsersController.js)
+Update the endpoint `POST /users` endpoint to start a background processing for sending a “Welcome email” to the user:
 
+* Create a `Bull` queue `userQueue`
+* When a new user is stored (in DB), add a job to this queue with the `userId`
+
+Update the file `worker.js`:
+
+* By using the module Bull, create a queue userQueue
+* Process this queue:
+  * If userId is not present in the job, raise an error `Missing userId`
+  * If no document is found in DB based on the `userId`, raise an error `User not found`
+  * Print in the console `Welcome <email>!`
+
+In real life, you can use a third party service like [Mailgun](https://www.mailgun.com/) to send real email. These API are slow, (sending via SMTP is worst!) and sending emails via a background job is important to optimize API endpoint.
 
 
 
