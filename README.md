@@ -188,7 +188,7 @@ Inside the folder `utils`, create a file `redis.js` that contains the class `Red
 
 After the class definition, create and export an instance of `RedisClient` called `redisClient`.
 ```groovy
-bob@dylan:~$ cat main.js
+bob@dylan:~$ cat main-0.js
 import redisClient from './utils/redis';
 
 (async () => {
@@ -202,7 +202,7 @@ import redisClient from './utils/redis';
     }, 1000*10)
 })();
 
-bob@dylan:~$ npm run dev main.js
+bob@dylan:~$ npm run dev main-0.js
 true
 null
 12
@@ -225,7 +225,7 @@ Inside the folder `utils`, create a file `db.js` that contains the class `DBClie
 
 After the class definition, create and export an instance of `DBClient` called `dbClient`.
 ```groovy
-bob@dylan:~$ cat main.js
+bob@dylan:~$ cat main-1.js
 import dbClient from './utils/db';
 
 const waitConnection = () => {
@@ -257,7 +257,7 @@ const waitConnection = () => {
     console.log(await dbClient.nbFiles());
 })();
 
-bob@dylan:~$ npm run dev main.js
+bob@dylan:~$ npm run dev main-1.js
 false
 true
 4
