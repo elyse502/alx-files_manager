@@ -667,9 +667,9 @@ Update the endpoint `POST /users` endpoint to start a background processing for 
 
 Update the file `worker.js`:
 
-* By using the module Bull, create a queue userQueue
+* By using the module `Bull`, create a queue `userQueue`
 * Process this queue:
-  * If userId is not present in the job, raise an error `Missing userId`
+  * If `userId` is not present in the job, raise an error `Missing userId`
   * If no document is found in DB based on the `userId`, raise an error `User not found`
   * Print in the console `Welcome <email>!`
 
