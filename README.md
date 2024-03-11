@@ -675,6 +675,101 @@ Update the file `worker.js`:
 
 In real life, you can use a third party service like [Mailgun](https://www.mailgun.com/) to send real email. These API are slow, (sending via SMTP is worst!) and sending emails via a background job is important to optimize API endpoint.
 
+---
+
+<div align="center">
+
+# REFERENCE 📚
+</div>
+
+# If someone like me, try many thing to make mongodb work in wsl and fail...
+Install `mongodb` in **windows** is one of solution that work for me, and i can access it from **wsl**, u can also install `mongodb` compass to have more control (GUI)
+
+link 👉 https://www.mongodb.com/try/download/community
+
+* How did you access it from window to wsl?
+
+=> When u install it, it will run in background as service automaticly. So just go to **wsl** and run ur code, it will be runing on localhost port `2017`
+
+![Screenshot 2024-03-10 193329](https://github.com/elyse502/ALX-PROJECTS/assets/125453474/770c12c4-5851-4a57-a0ac-f0dd2f170ecc)
+
+also from compass create database files_manager
+
+![Screenshot 2024-03-10 193501](https://github.com/elyse502/ALX-PROJECTS/assets/125453474/c4bcacdd-5d57-41d1-a50e-f4550df0220a)
+
+You can use this script to fill files and users :
+```groovy
+const MongoClient = require('mongodb').MongoClient;
+
+
+const url = 'mongodb://localhost:27017';
+
+
+const dbName = 'files_manager';
+
+
+MongoClient.connect(url, { useUnifiedTopology: true }, function (err, client) {
+  if (err) {
+    console.error('error connecting to MongoDB: ', err);
+    return;
+  }
+
+  console.log("Connected successfully");
+
+  const db = client.db(dbName);
+
+  // Check 'users' collection
+  checkAndInsert(db, 'users', 4, { name: 'User' });
+
+  // Check 'files' collection
+  checkAndInsert(db, 'files', 30, { name: 'File' });
+});
+
+function checkAndInsert(db, collectionName, requiredCount) {
+  const collection = db.collection(collectionName);
+  collection.countDocuments((err, count) => {
+    if (err) {
+      console.error(`error counting documents in '${collectionName}': `, err);
+      return;
+    }
+
+    if (count < requiredCount) {
+      const documents = Array.from({ length: requiredCount - count }, (_, i) => {
+        return { name: `${collectionName} ${i + count + 1}` };
+      });
+
+      collection.insertMany(documents, (err, result) => {
+        if (err) {
+          console.error(`error inserting documents into '${collectionName}': `, err);
+        }
+      });
+    }
+  });
+}
+```
+
+* Conversation 👉 [Discord](https://discord.com/channels/1148581179084243054/1216269582852034672)
+
+## Other Solution 🛠️
+The last solution in this link solved the `MongoDB` problem of **WSL** with me, if you have a problem with it try this.
+
+Check the link 👉 https://stackoverflow.com/questions/72803345/unable-to-locate-package-mongodb-org 
+
+![Screenshot 2024-03-10 194035](https://github.com/elyse502/ALX-PROJECTS/assets/125453474/7b25ea71-e97a-417f-bd0f-aedc8632fce3)
+
+Having this error MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:27017? 👇
+
+
+>```
+> Install  mongodb in windows
+> make sure service of mongodb in windows after installation is on
+> open mongodb compass see if u can connect with database
+> if u connect then u good, just go wsl and run script
+> if u couldnt connect with compass, mean service is not on
+
+---
+
+
 
 
 
