@@ -797,7 +797,12 @@ Guide 👉 https://docs.google.com/document/d/1o-JwbC-wwHxmjf_TqmW3Nh4oNsa3grCgB
 
 More info 📰 Visist 👉 [Discord](https://discord.com/channels/1148581179084243054/1216571515550699550)
 
+## How do I fix `ESLint...`?
+> npm run lint -- --fix filepath(eg controllers/*.js)
+
 ---
+
+
 
 
 
