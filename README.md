@@ -554,8 +554,43 @@ bob@dylan:~$ curl -XPUT 0.0.0.0:5000/files/5f1e8896c7ba06511e683b25/unpublish -H
 bob@dylan:~$
 ```
 
+## 8. File data: [utils/](utils/), [routes/index.js](routes/index.js), [controllers/FilesController.js](controllers/FilesController.js)
+In the file `routes/index.js`, add one new endpoint:
 
+* `GET /files/:id/data` => `FilesController.getFile`
 
+In the file `controllers/FilesController.js`, add the new endpoint:
+
+`GET /files/:id/data` should return the content of the file document based on the ID:
+
+* If no file document is linked to the ID passed as parameter, return an error `Not found` with a status code 404
+* If the file document (folder or file) is not public (`isPublic: false`) and no user authenticate or not the owner of the file, return an error `Not found` with a status code 404
+* If the type of the file document is `folder`, return an error `A folder doesn't have content` with a status code 400
+* If the file is not locally present, return an error `Not found` with a status code 404
+* Otherwise:
+  * By using the module `mime-types`, get the [MIME-type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) based on the `name` of the file
+  * Return the content of the file with the correct MIME-type
+```groovy
+bob@dylan:~$ curl 0.0.0.0:5000/connect -H "Authorization: Basic Ym9iQGR5bGFuLmNvbTp0b3RvMTIzNCE=" ; echo ""
+{"token":"f21fb953-16f9-46ed-8d9c-84c6450ec80f"}
+bob@dylan:~$ 
+bob@dylan:~$ curl -XPUT 0.0.0.0:5000/files/5f1e879ec7ba06511e683b22/unpublish -H "X-Token: f21fb953-16f9-46ed-8d9c-84c6450ec80f" ; echo ""
+{"id":"5f1e879ec7ba06511e683b22","userId":"5f1e7cda04a394508232559d","name":"myText.txt","type":"file","isPublic":false,"parentId":0}
+bob@dylan:~$ 
+bob@dylan:~$ curl -XGET 0.0.0.0:5000/files/5f1e879ec7ba06511e683b22/data -H "X-Token: f21fb953-16f9-46ed-8d9c-84c6450ec80f" ; echo ""
+Hello Webstack!
+
+bob@dylan:~$ curl -XGET 0.0.0.0:5000/files/5f1e879ec7ba06511e683b22/data ; echo ""
+{"error":"Not found"}
+bob@dylan:~$ 
+bob@dylan:~$ curl -XPUT 0.0.0.0:5000/files/5f1e879ec7ba06511e683b22/publish -H "X-Token: f21fb953-16f9-46ed-8d9c-84c6450ec80f" ; echo ""
+{"id":"5f1e879ec7ba06511e683b22","userId":"5f1e7cda04a394508232559d","name":"myText.txt","type":"file","isPublic":true,"parentId":0}
+bob@dylan:~$ 
+bob@dylan:~$ curl -XGET 0.0.0.0:5000/files/5f1e879ec7ba06511e683b22/data ; echo ""
+Hello Webstack!
+
+bob@dylan:~$
+```
 
 
 
