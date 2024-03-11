@@ -782,7 +782,22 @@ Having this error MongoServerSelectionError: connect ECONNREFUSED 127.0.0.1:2701
 
 ---
 
+## FINAAAAALY TASK 6 ✍️
+You will find **google doc** guide in this thread, about most big point to be aware of in `task6`, I'm planning to add all bug I found and fix, 
+let make it global, and everyone add BUG they find and fix inside to this thread and I make sure to add them to **google doc**, let all GET 200% 🛴 in this project.
 
+Guide 👉 https://docs.google.com/document/d/1o-JwbC-wwHxmjf_TqmW3Nh4oNsa3grCgB_3eJKCiASI/edit?usp=sharing
+
+>```
+>TASK6 some red check here fix : 
+> TLDR of some bug :
+> the result u return make sure it not _id but id
+> inside getindex when u looking for files, use parentid as string (dont ask me why, but enjoy green check)
+> when u insert new document in postUpload, and it dont have parent id, which mean we will insert it with default value 0, make sure that  value is not string, yeah yeah i know this crazy, but make sure to insert it as integer.
+
+More info 📰 Visist 👉 [Discord](https://discord.com/channels/1148581179084243054/1216571515550699550)
+
+---
 
 
 
