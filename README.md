@@ -682,7 +682,7 @@ In real life, you can use a third party service like [Mailgun](https://www.mailg
 # REFERENCE 📚
 </div>
 
-# If someone like me, try many thing to make mongodb work in wsl and fail...
+## If someone like me, try many thing to make mongodb work in wsl and fail...
 Install `mongodb` in **windows** is one of solution that work for me, and i can access it from **wsl**, u can also install `mongodb` compass to have more control (GUI)
 
 link 👉 https://www.mongodb.com/try/download/community
