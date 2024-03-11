@@ -472,8 +472,47 @@ bob@dylan:~$ ls /tmp/files_manager/
 bob@dylan:~$
 ```
 
+## 6. Get and list file: [utils/](utils/), [routes/index.js](routes/index.js), [controllers/FilesController.js](controllers/FilesController.js)
+In the file `routes/index.js`, add 2 new endpoints:
 
+* `GET /files/:id` => `FilesController.getShow`
+* `GET /files` => `FilesController.getIndex`
 
+In the file `controllers/FilesController.js`, add the 2 new endpoints:
+
+`GET /files/:id` should retrieve the file document based on the ID:
+
+* Retrieve the user based on the token:
+  * If not found, return an error `Unauthorized` with a status code 401
+* If no file document is linked to the user and the ID passed as parameter, return an error `Not found` with a status code 404
+* Otherwise, return the file document
+
+`GET /files` should retrieve all users file documents for a specific `parentId` and with pagination:
+
+* Retrieve the user based on the token:
+  * If not found, return an error `Unauthorized` with a status code 401
+* Based on the query parameters `parentId` and `page`, return the list of file document
+  * `parentId`:
+    * No validation of `parentId` needed - if the `parentId` is not linked to any user folder, returns an empty list
+    * By default, `parentId` is equal to 0 = the root
+  * Pagination:
+    * Each page should be 20 items max
+    * `page` query parameter starts at 0 for the first page. If equals to 1, it means it’s the second page (form the 20th to the 40th), etc…
+    * Pagination can be done directly by the `aggregate` of MongoDB
+```groovy
+bob@dylan:~$ curl 0.0.0.0:5000/connect -H "Authorization: Basic Ym9iQGR5bGFuLmNvbTp0b3RvMTIzNCE=" ; echo ""
+{"token":"f21fb953-16f9-46ed-8d9c-84c6450ec80f"}
+bob@dylan:~$ 
+bob@dylan:~$ curl -XGET 0.0.0.0:5000/files -H "X-Token: f21fb953-16f9-46ed-8d9c-84c6450ec80f" ; echo ""
+[{"id":"5f1e879ec7ba06511e683b22","userId":"5f1e7cda04a394508232559d","name":"myText.txt","type":"file","isPublic":false,"parentId":0},{"id":"5f1e881cc7ba06511e683b23","userId":"5f1e7cda04a394508232559d","name":"images","type":"folder","isPublic":false,"parentId":0},{"id":"5f1e8896c7ba06511e683b25","userId":"5f1e7cda04a394508232559d","name":"image.png","type":"image","isPublic":true,"parentId":"5f1e881cc7ba06511e683b23"}]
+bob@dylan:~$
+bob@dylan:~$ curl -XGET 0.0.0.0:5000/files?parentId=5f1e881cc7ba06511e683b23 -H "X-Token: f21fb953-16f9-46ed-8d9c-84c6450ec80f" ; echo ""
+[{"id":"5f1e8896c7ba06511e683b25","userId":"5f1e7cda04a394508232559d","name":"image.png","type":"image","isPublic":true,"parentId":"5f1e881cc7ba06511e683b23"}]
+bob@dylan:~$
+bob@dylan:~$ curl -XGET 0.0.0.0:5000/files/5f1e8896c7ba06511e683b25 -H "X-Token: f21fb953-16f9-46ed-8d9c-84c6450ec80f" ; echo ""
+{"id":"5f1e8896c7ba06511e683b25","userId":"5f1e7cda04a394508232559d","name":"image.png","type":"image","isPublic":true,"parentId":"5f1e881cc7ba06511e683b23"}
+bob@dylan:~$
+```
 
 
 
